@@ -260,6 +260,77 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
     text-align: center;
 }
 
+/* Password overlay */
+.password-overlay {
+    position: fixed;
+    inset: 0;
+    background: #1a1a2e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001;
+}
+
+.password-box {
+    background: linear-gradient(135deg, #fff5f5 0%, #ffe8ec 100%);
+    border-radius: 16px;
+    padding: 40px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+
+.password-box h2 {
+    color: #c44569;
+    margin-bottom: 8px;
+    font-size: 1.5rem;
+}
+
+.password-box p {
+    color: #8a4a6b;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+}
+
+.password-box input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #f0c4d0;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    text-align: center;
+}
+
+.password-box input:focus {
+    border-color: #ff6b9d;
+}
+
+.password-box button {
+    margin-top: 16px;
+    padding: 12px 32px;
+    background: #ff6b9d;
+    border: none;
+    border-radius: 20px;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.password-box button:hover {
+    background: #c44569;
+}
+
+.password-box .error {
+    color: #c44569;
+    font-size: 0.85rem;
+    margin-top: 12px;
+    display: none;
+}
+
 /* Setup overlay */
 .setup-overlay {
     position: fixed;
@@ -385,6 +456,17 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
     </style>
 </head>
 <body>
+    <!-- Password screen -->
+    <div class="password-overlay" id="password-overlay">
+        <div class="password-box">
+            <h2>🔒 Private Scrapbook</h2>
+            <p>Enter the password to view</p>
+            <input type="password" id="password-input" placeholder="Password">
+            <button id="password-btn">Enter</button>
+            <p class="error" id="password-error">Incorrect password</p>
+        </div>
+    </div>
+
     <!-- Setup screen -->
     <div class="setup-overlay" id="setup-overlay">
         <div class="setup-box">
@@ -598,6 +680,27 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
 
         function isPortrait(p) { return portraitSet[p] === 1; }
 
+        // --- Password gate ---
+        var PASSWORD = 'Alisha123';
+        var passwordOverlay = document.getElementById('password-overlay');
+        var passwordInput = document.getElementById('password-input');
+        var passwordBtn = document.getElementById('password-btn');
+        var passwordError = document.getElementById('password-error');
+
+        function checkPassword() {
+            if (passwordInput.value === PASSWORD) {
+                passwordOverlay.style.display = 'none';
+                loadPhotos(FOLDER_ID, API_KEY);
+            } else {
+                passwordError.style.display = 'block';
+            }
+        }
+
+        passwordBtn.addEventListener('click', checkPassword);
+        passwordInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') checkPassword();
+        });
+
         // --- Setup ---
         var setupOverlay = document.getElementById('setup-overlay');
         var loadingOverlay = document.getElementById('loading-overlay');
@@ -611,9 +714,6 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
         // Hardcoded config
         var FOLDER_ID = '1_PJLLTMPg4F82AJAqC2CLEry6XXrRpEv';
         var API_KEY = 'AIzaSyBuupzl3zc75ibjyNYR--3MXV-n-uX0LYs';
-
-        // Auto-load
-        loadPhotos(FOLDER_ID, API_KEY);
 
         setupBtn.addEventListener('click', function() {
             var folderLink = folderInput.value.trim();
