@@ -681,24 +681,30 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
         function isPortrait(p) { return portraitSet[p] === 1; }
 
         // --- Password gate ---
-        var PASSWORD_HASH = '5249f4fcc629efa0e6d6b2bf746b6c5de61611ce719ad61ac820fbe5c8cece66';
+        var ENCRYPTED_CONFIG = 'vb4UZtkFTkX9u1ZYNiKZ9oHf42ro4ATn8tj3+80Ti0yd92eQnFoEv3ww82J50apor+Mu8Y00Z9xw/8HTDxcq+8kKhdMQlk3qcImDNJYIk6fDK5G4vETPCIO2zXI3tfyv0jmMs8dH2HktcF6X5tQa/WLQGPflPCGHQn0bEYoAOQ==';
         var passwordOverlay = document.getElementById('password-overlay');
         var passwordInput = document.getElementById('password-input');
         var passwordBtn = document.getElementById('password-btn');
         var passwordError = document.getElementById('password-error');
 
-        async function sha256(str) {
-            var buf = new TextEncoder().encode(str);
-            var hash = await crypto.subtle.digest('SHA-256', buf);
-            return Array.from(new Uint8Array(hash)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+        async function decryptConfig(password) {
+            var combined = Uint8Array.from(atob(ENCRYPTED_CONFIG), function(c) { return c.charCodeAt(0); });
+            var iv = combined.slice(0, 12);
+            var ciphertext = combined.slice(12);
+
+            var keyBuf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(password));
+            var key = await crypto.subtle.importKey('raw', keyBuf, 'AES-GCM', false, ['decrypt']);
+
+            var decrypted = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: iv }, key, ciphertext);
+            return JSON.parse(new TextDecoder().decode(decrypted));
         }
 
         async function checkPassword() {
-            var hash = await sha256(passwordInput.value);
-            if (hash === PASSWORD_HASH) {
+            try {
+                var config = await decryptConfig(passwordInput.value);
                 passwordOverlay.style.display = 'none';
-                loadPhotos(FOLDER_ID, API_KEY);
-            } else {
+                loadPhotos(config.folderId, config.apiKey);
+            } catch(e) {
                 passwordError.style.display = 'block';
             }
         }
@@ -718,9 +724,6 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
         var setupError = document.getElementById('setup-error');
         var mainApp = document.getElementById('main-app');
 
-        // Hardcoded config
-        var FOLDER_ID = '1_PJLLTMPg4F82AJAqC2CLEry6XXrRpEv';
-        var API_KEY = 'AIzaSyBuupzl3zc75ibjyNYR--3MXV-n-uX0LYs';
 
         setupBtn.addEventListener('click', function() {
             var folderLink = folderInput.value.trim();
