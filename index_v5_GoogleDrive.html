@@ -681,14 +681,21 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
         function isPortrait(p) { return portraitSet[p] === 1; }
 
         // --- Password gate ---
-        var PASSWORD = 'Alisha123';
+        var PASSWORD_HASH = '5249f4fcc629efa0e6d6b2bf746b6c5de61611ce719ad61ac820fbe5c8cece66';
         var passwordOverlay = document.getElementById('password-overlay');
         var passwordInput = document.getElementById('password-input');
         var passwordBtn = document.getElementById('password-btn');
         var passwordError = document.getElementById('password-error');
 
-        function checkPassword() {
-            if (passwordInput.value === PASSWORD) {
+        async function sha256(str) {
+            var buf = new TextEncoder().encode(str);
+            var hash = await crypto.subtle.digest('SHA-256', buf);
+            return Array.from(new Uint8Array(hash)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+        }
+
+        async function checkPassword() {
+            var hash = await sha256(passwordInput.value);
+            if (hash === PASSWORD_HASH) {
                 passwordOverlay.style.display = 'none';
                 loadPhotos(FOLDER_ID, API_KEY);
             } else {
