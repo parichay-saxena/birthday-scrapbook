@@ -187,29 +187,18 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
 
     .mobile-page .collage {
         flex: 1;
-        height: 0;
         min-height: 0;
         overflow: hidden;
-        display: grid;
+        display: flex;
+        flex-direction: column;
         gap: 2px;
     }
 
     .mobile-page .collage img {
-        width: 100%;
-        height: 100%;
+        flex: 1;
         min-height: 0;
-        min-width: 0;
+        width: 100%;
         object-fit: contain;
-    }
-
-    .mobile-page .collage.layout-1 {
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr;
-    }
-
-    .mobile-page .collage.layout-2 {
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr 1fr;
     }
 
     .mobile-flip {
@@ -256,29 +245,18 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
 
     .mobile-flip-face .collage {
         flex: 1;
-        height: 0;
         min-height: 0;
         overflow: hidden;
-        display: grid;
+        display: flex;
+        flex-direction: column;
         gap: 2px;
     }
 
     .mobile-flip-face .collage img {
-        width: 100%;
-        height: 100%;
+        flex: 1;
         min-height: 0;
-        min-width: 0;
+        width: 100%;
         object-fit: contain;
-    }
-
-    .mobile-flip-face .collage.layout-1 {
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr;
-    }
-
-    .mobile-flip-face .collage.layout-2 {
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr 1fr;
     }
 
     .mobile-flip-face.back {
