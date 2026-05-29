@@ -202,28 +202,9 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
         object-fit: contain;
     }
 
-    .mobile-page .layout-1 {
+    .mobile-page .collage {
         grid-template-columns: 1fr;
         grid-template-rows: 1fr;
-    }
-
-    .mobile-page .layout-2 {
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr 1fr;
-    }
-
-    .mobile-page .layout-2-side {
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr;
-    }
-
-    .mobile-page .layout-3 {
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr 1fr 1fr;
-    }
-
-    .mobile-page .layout-3 img:first-child {
-        grid-column: 1;
     }
 
     .mobile-flip {
@@ -285,28 +266,9 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
         object-fit: contain;
     }
 
-    .mobile-flip-face .layout-1 {
+    .mobile-flip-face .collage {
         grid-template-columns: 1fr;
         grid-template-rows: 1fr;
-    }
-
-    .mobile-flip-face .layout-2 {
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr 1fr;
-    }
-
-    .mobile-flip-face .layout-2-side {
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr;
-    }
-
-    .mobile-flip-face .layout-3 {
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr 1fr 1fr;
-    }
-
-    .mobile-flip-face .layout-3 img:first-child {
-        grid-column: 1;
     }
 
     .mobile-flip-face.back {
@@ -1039,10 +1001,12 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
 
             // Build pages
             var pages = [];
+            var mobilePages = [];
 
             pages.push({
                 html: '<div class="page-content cover-page"><span class="emoji">\u{1F382}\u{1F388}\u{1F389}</span><h1>Happy Birthday<br>Alisha!</h1><h2>A scrapbook of memories</h2><span class="emoji">\u{1F496}✨\u{1F31F}</span></div>'
             });
+            mobilePages.push(pages[pages.length - 1]);
 
             var years = Object.keys(photosByYear).sort();
 
@@ -1050,10 +1014,13 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
                 var group = photosByYear[year];
                 var photos = group.photos;
 
-                pages.push({
+                var dividerPage = {
                     html: '<div class="page-content year-divider"><h1>' + year + '</h1><p>' + group.caption + '</p></div>'
-                });
+                };
+                pages.push(dividerPage);
+                mobilePages.push(dividerPage);
 
+                // Desktop: 3, 2, 3, 1 pattern
                 var pattern = [3, 2, 3, 1, 3, 2];
                 var i = 0;
                 var pi = 0;
@@ -1084,11 +1051,20 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
                     i += take;
                     pi++;
                 }
+
+                // Mobile: 1 photo per page
+                for (var m = 0; m < photos.length; m++) {
+                    mobilePages.push({
+                        html: '<div class="page-content"><div class="collage layout-1">' + imgTag(photos[m]) + '</div></div>'
+                    });
+                }
             });
 
-            pages.push({
+            var backPage = {
                 html: '<div class="page-content back-cover"><span class="emoji" style="font-size:4rem;">\u{1F496}</span><h1>Happy Birthday, Superstar!</h1><p>29 years of roasting Dad, outsmarting her sister,<br>eating everything in sight, and casually<br>building the future of AI on the side.</p><p>We love you more than you love food.<br>(And that\'s saying A LOT.) \u{1F319}✨\u{1F355}</p></div>'
-            });
+            };
+            pages.push(backPage);
+            mobilePages.push(backPage);
 
             if (pages.length % 2 !== 0) pages.push({ html: '<div class="page-content"></div>' });
 
@@ -1103,7 +1079,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
                 var mFlipBack = document.getElementById('mobile-flip-back');
 
                 var currentPage = 0;
-                var totalPages = pages.length;
+                var totalPages = mobilePages.length;
 
                 function updateControls() {
                     prevBtn.disabled = currentPage === 0;
@@ -1112,7 +1088,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
                 }
 
                 function showPage(idx) {
-                    mCurrentPage.innerHTML = pages[idx] ? pages[idx].html : '';
+                    mCurrentPage.innerHTML = mobilePages[idx] ? mobilePages[idx].html : '';
                     updateControls();
                 }
 
@@ -1123,9 +1099,9 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
                     var nextIdx = currentPage + 1;
 
                     // Put next page underneath (visible as flip reveals it)
-                    mNextPage.innerHTML = pages[nextIdx] ? pages[nextIdx].html : '';
+                    mNextPage.innerHTML = mobilePages[nextIdx] ? mobilePages[nextIdx].html : '';
                     // Flip overlay front = current page (lifts up)
-                    mFlipFront.innerHTML = pages[currentPage] ? pages[currentPage].html : '';
+                    mFlipFront.innerHTML = mobilePages[currentPage] ? mobilePages[currentPage].html : '';
                     // Hide current page underneath flip
                     mCurrentPage.style.visibility = 'hidden';
 
@@ -1134,7 +1110,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
                     setTimeout(function() {
                         mFlip.classList.remove('active');
                         currentPage = nextIdx;
-                        mCurrentPage.innerHTML = pages[currentPage] ? pages[currentPage].html : '';
+                        mCurrentPage.innerHTML = mobilePages[currentPage] ? mobilePages[currentPage].html : '';
                         mCurrentPage.style.visibility = 'visible';
                         updateControls();
                         flipping = false;
