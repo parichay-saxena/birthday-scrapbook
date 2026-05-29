@@ -78,11 +78,11 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
     transform-style: preserve-3d;
     z-index: 10;
     pointer-events: none;
-    display: none;
+    visibility: hidden;
 }
 
 .pf-flip-overlay.active {
-    display: block;
+    visibility: visible;
     animation: pageFlip 1s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
 }
 
@@ -1154,8 +1154,11 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
                     var nextLeftIdx = nextSpread * 2;
                     var nextRightIdx = nextSpread * 2 + 1;
 
+                    // Set up the flip: front = current right page, back = next left page
                     flipFrontContent.innerHTML = pages[curRightIdx] ? pages[curRightIdx].html : '';
                     flipBackContent.innerHTML = pages[nextLeftIdx] ? pages[nextLeftIdx].html : '';
+                    // Put next spread in place (hidden behind flip overlay)
+                    leftContent.innerHTML = pages[nextLeftIdx] ? pages[nextLeftIdx].html : '';
                     rightContent.innerHTML = pages[nextRightIdx] ? pages[nextRightIdx].html : '';
 
                     flipOverlay.classList.add('active');
@@ -1163,7 +1166,6 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
                     setTimeout(function() {
                         flipOverlay.classList.remove('active');
                         currentSpread = nextSpread;
-                        leftContent.innerHTML = pages[nextLeftIdx] ? pages[nextLeftIdx].html : '';
                         updateControls();
                         flipping = false;
                     }, 1000);
@@ -1195,6 +1197,11 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
 
             document.getElementById('pf-left').addEventListener('click', goPrev);
             document.getElementById('pf-right').addEventListener('click', goNext);
+
+            // Reload on viewport mode change
+            window.matchMedia('(max-width: 768px)').addEventListener('change', function() {
+                location.reload();
+            });
         }
     })();
     </script>
