@@ -1182,6 +1182,8 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
                     // Front of flip = current right page, back = next left page
                     flipFrontContent.innerHTML = pages[curRightIdx] ? pages[curRightIdx].html : '';
                     flipBackContent.innerHTML = pages[nextLeftIdx] ? pages[nextLeftIdx].html : '';
+                    // Update left page now (visible immediately, no overlap with flip)
+                    leftContent.innerHTML = pages[nextLeftIdx] ? pages[nextLeftIdx].html : '';
                     // Next right page loads underneath (visible once flip passes midpoint)
                     rightContent.innerHTML = pages[nextRightIdx] ? pages[nextRightIdx].html : '';
 
@@ -1190,7 +1192,6 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
                     setTimeout(function() {
                         flipOverlay.classList.remove('active');
                         currentSpread = nextSpread;
-                        leftContent.innerHTML = pages[nextLeftIdx] ? pages[nextLeftIdx].html : '';
                         updateControls();
                         flipping = false;
                     }, 1000);
