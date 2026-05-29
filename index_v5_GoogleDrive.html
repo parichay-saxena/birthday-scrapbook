@@ -115,7 +115,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
     100% { transform: rotateX(180deg); }
 }
 
-/* Mobile: single page, flip-up animation */
+/* Mobile: single page notepad flip */
 @media (max-width: 768px) {
     html, body {
         overflow: hidden;
@@ -125,105 +125,15 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
     }
 
     .pf-container {
-        padding: 6px;
-        gap: 6px;
+        padding: 4px;
+        gap: 4px;
         height: 100vh;
         height: 100dvh;
         overflow: hidden;
     }
 
     .pf-book {
-        perspective: 1200px;
-        overflow: hidden;
-    }
-
-    .pf-left-page {
         display: none;
-    }
-
-    .pf-right-page {
-        width: 100%;
-        height: 100%;
-        border-radius: 10px;
-        border-left: none;
-        overflow: hidden;
-    }
-
-    .pf-right-page::before {
-        display: none;
-    }
-
-    .pf-left-page::after {
-        display: none;
-    }
-
-    .page-content {
-        overflow: hidden;
-        height: 100%;
-        min-height: 0;
-    }
-
-    .collage {
-        height: 100%;
-        min-height: 0;
-        overflow: hidden;
-    }
-
-    .collage img {
-        width: 100%;
-        height: 100%;
-        min-height: 0;
-        min-width: 0;
-        object-fit: contain;
-    }
-
-    .layout-1 {
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr;
-    }
-
-    .layout-2 {
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr 1fr;
-    }
-
-    .layout-2-side {
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr;
-    }
-
-    .layout-3 {
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr 1fr 1fr;
-    }
-
-    .layout-3 img:first-child {
-        grid-column: 1;
-    }
-
-    .pf-flip-overlay {
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        transform-origin: top center;
-        transform-style: preserve-3d;
-    }
-
-    .pf-flip-overlay.active {
-        animation: pageFlipUp 1s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
-    }
-
-    .pf-flip-front, .pf-flip-back {
-        border-radius: 10px;
-        backface-visibility: hidden;
-    }
-
-    .pf-flip-front {
-        background: linear-gradient(135deg, #fff5f5 0%, #ffe8ec 100%);
-    }
-
-    .pf-flip-back {
-        background: linear-gradient(135deg, #fff5f5 0%, #ffe8ec 100%);
-        transform: rotateX(-180deg);
     }
 
     .pf-controls button {
@@ -235,6 +145,103 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
         font-size: 0.75rem;
         min-width: 60px;
     }
+
+    /* Mobile notepad structure */
+    .mobile-notepad {
+        display: block;
+        width: 100%;
+        flex: 1;
+        min-height: 0;
+        position: relative;
+        perspective: 1200px;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .mobile-page {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, #fff5f5 0%, #ffe8ec 100%);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .mobile-page .page-content {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .mobile-page .collage {
+        height: 100%;
+        min-height: 0;
+        overflow: hidden;
+    }
+
+    .mobile-page .collage img {
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+        min-width: 0;
+        object-fit: contain;
+    }
+
+    .mobile-page .layout-1 {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+    }
+
+    .mobile-page .layout-2 {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr;
+    }
+
+    .mobile-page .layout-2-side {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr;
+    }
+
+    .mobile-page .layout-3 {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+    }
+
+    .mobile-page .layout-3 img:first-child {
+        grid-column: 1;
+    }
+
+    .mobile-flip {
+        position: absolute;
+        inset: 0;
+        transform-origin: top center;
+        transform-style: preserve-3d;
+        z-index: 10;
+        pointer-events: none;
+        display: none;
+    }
+
+    .mobile-flip.active {
+        display: block;
+        animation: pageFlipUp 1s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+    }
+
+    .mobile-flip-face {
+        position: absolute;
+        inset: 0;
+        backface-visibility: hidden;
+        border-radius: 10px;
+        overflow: hidden;
+        background: linear-gradient(135deg, #fff5f5 0%, #ffe8ec 100%);
+    }
+
+    .mobile-flip-face.back {
+        transform: rotateX(-180deg);
+    }
+}
+
+/* Hide mobile notepad on desktop */
+.mobile-notepad {
+    display: none;
 }
 
 .page-content {
@@ -623,6 +630,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
     </div>
 
     <div class="pf-container" style="display:none;" id="main-app">
+        <!-- Desktop: two-page book -->
         <div class="pf-book" id="pf-book">
             <div class="pf-left-page" id="pf-left">
                 <div class="page-content" id="pf-left-content"></div>
@@ -639,6 +647,17 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
                 </div>
             </div>
         </div>
+
+        <!-- Mobile: single page notepad -->
+        <div class="mobile-notepad" id="mobile-notepad">
+            <div class="mobile-page" id="mobile-next-page"></div>
+            <div class="mobile-page" id="mobile-current-page"></div>
+            <div class="mobile-flip" id="mobile-flip">
+                <div class="mobile-flip-face front" id="mobile-flip-front"></div>
+                <div class="mobile-flip-face back" id="mobile-flip-back"></div>
+            </div>
+        </div>
+
         <div class="pf-controls">
             <button id="pf-prev" disabled>&#9664; Back</button>
             <span class="pf-indicator" id="pf-indicator"></span>
@@ -1005,7 +1024,13 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
             var isMobile = window.matchMedia('(max-width: 768px)').matches;
 
             if (isMobile) {
-                // Single-page mode
+                // Mobile: single-page notepad mode
+                var mCurrentPage = document.getElementById('mobile-current-page');
+                var mNextPage = document.getElementById('mobile-next-page');
+                var mFlip = document.getElementById('mobile-flip');
+                var mFlipFront = document.getElementById('mobile-flip-front');
+                var mFlipBack = document.getElementById('mobile-flip-back');
+
                 var currentPage = 0;
                 var totalPages = pages.length;
 
@@ -1016,7 +1041,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
                 }
 
                 function showPage(idx) {
-                    rightContent.innerHTML = pages[idx] ? pages[idx].html : '';
+                    mCurrentPage.innerHTML = pages[idx] ? pages[idx].html : '';
                     updateControls();
                 }
 
@@ -1026,17 +1051,21 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
 
                     var nextIdx = currentPage + 1;
 
-                    // Front of flipping page = current page
-                    flipFrontContent.innerHTML = pages[currentPage] ? pages[currentPage].html : '';
-                    // Back of flipping page = next page (revealed as page flips over)
-                    flipBackContent.innerHTML = pages[nextIdx] ? pages[nextIdx].html : '';
+                    // Put next page underneath (visible as flip reveals it)
+                    mNextPage.innerHTML = pages[nextIdx] ? pages[nextIdx].html : '';
+                    // Flip overlay front = current page (lifts up)
+                    mFlipFront.innerHTML = pages[currentPage] ? pages[currentPage].html : '';
+                    // Hide current page underneath flip
+                    mCurrentPage.style.visibility = 'hidden';
 
-                    flipOverlay.classList.add('active');
+                    mFlip.classList.add('active');
 
                     setTimeout(function() {
-                        flipOverlay.classList.remove('active');
+                        mFlip.classList.remove('active');
                         currentPage = nextIdx;
-                        showPage(currentPage);
+                        mCurrentPage.innerHTML = pages[currentPage] ? pages[currentPage].html : '';
+                        mCurrentPage.style.visibility = 'visible';
+                        updateControls();
                         flipping = false;
                     }, 1000);
                 }
