@@ -159,19 +159,31 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
 
     .page-content {
         overflow: hidden;
-        max-height: 100%;
+        height: 100%;
     }
 
     .collage {
         height: 100%;
-        max-height: 100%;
         overflow: hidden;
     }
 
     .collage img {
         object-fit: contain;
         min-height: 0;
-        max-height: 100%;
+        height: 100%;
+    }
+
+    .layout-2 {
+        grid-template-rows: 1fr 1fr;
+    }
+
+    .layout-2-side {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr;
+    }
+
+    .layout-3 {
+        grid-template-rows: 1fr 1fr;
     }
 
     .pf-flip-overlay {
@@ -181,7 +193,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
     }
 
     .pf-flip-overlay.active {
-        animation: pageFlipUp 0.8s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+        animation: pageFlipUp 1.2s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
     }
 
     .pf-flip-front, .pf-flip-back {
@@ -1004,9 +1016,12 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
                     setTimeout(function() {
                         flipOverlay.classList.remove('active');
                         currentPage = nextIdx;
-                        showPage(currentPage);
-                        flipping = false;
-                    }, 800);
+                        rightContent.innerHTML = '';
+                        setTimeout(function() {
+                            showPage(currentPage);
+                            flipping = false;
+                        }, 50);
+                    }, 1200);
                 }
 
                 function goPrev() {
