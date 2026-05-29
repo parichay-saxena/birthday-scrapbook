@@ -1197,11 +1197,6 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
 
             document.getElementById('pf-left').addEventListener('click', goPrev);
             document.getElementById('pf-right').addEventListener('click', goNext);
-
-            // Reload on viewport mode change
-            window.matchMedia('(max-width: 768px)').addEventListener('change', function() {
-                location.reload();
-            });
         }
     })();
     </script>
