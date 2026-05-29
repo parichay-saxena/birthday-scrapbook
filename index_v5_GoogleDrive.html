@@ -153,7 +153,8 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
 
     /* Mobile notepad structure */
     .mobile-notepad {
-        display: block;
+        display: flex;
+        flex-direction: column;
         width: 100%;
         flex: 1;
         min-height: 0;
@@ -165,7 +166,12 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
 
     .mobile-page {
         position: absolute;
-        inset: 0;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
         background: linear-gradient(135deg, #fff5f5 0%, #ffe8ec 100%);
         border-radius: 10px;
         overflow: hidden;
@@ -175,12 +181,17 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
         width: 100%;
         height: 100%;
         overflow: hidden;
+        display: flex;
+        flex-direction: column;
     }
 
     .mobile-page .collage {
-        height: 100%;
+        flex: 1;
+        height: 0;
         min-height: 0;
         overflow: hidden;
+        display: grid;
+        gap: 2px;
     }
 
     .mobile-page .collage img {
@@ -217,7 +228,12 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
 
     .mobile-flip {
         position: absolute;
-        inset: 0;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
         transform-origin: top center;
         transform-style: preserve-3d;
         z-index: 10;
@@ -232,11 +248,65 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
 
     .mobile-flip-face {
         position: absolute;
-        inset: 0;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
         backface-visibility: hidden;
         border-radius: 10px;
         overflow: hidden;
         background: linear-gradient(135deg, #fff5f5 0%, #ffe8ec 100%);
+    }
+
+    .mobile-flip-face .page-content {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mobile-flip-face .collage {
+        flex: 1;
+        height: 0;
+        min-height: 0;
+        overflow: hidden;
+        display: grid;
+        gap: 2px;
+    }
+
+    .mobile-flip-face .collage img {
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+        min-width: 0;
+        object-fit: contain;
+    }
+
+    .mobile-flip-face .layout-1 {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+    }
+
+    .mobile-flip-face .layout-2 {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr;
+    }
+
+    .mobile-flip-face .layout-2-side {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr;
+    }
+
+    .mobile-flip-face .layout-3 {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+    }
+
+    .mobile-flip-face .layout-3 img:first-child {
+        grid-column: 1;
     }
 
     .mobile-flip-face.back {
