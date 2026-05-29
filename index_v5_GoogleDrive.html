@@ -1097,21 +1097,16 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
 
                     var nextIdx = currentPage + 1;
 
-                    // Next page underneath (revealed as current page flips up)
-                    mNextPage.innerHTML = mobilePages[nextIdx] ? mobilePages[nextIdx].html : '';
-                    // Flip overlay = current page lifting up
+                    // Show next page underneath
+                    mCurrentPage.innerHTML = mobilePages[nextIdx] ? mobilePages[nextIdx].html : '';
+                    // Flip overlay shows old page lifting up
                     mFlipFront.innerHTML = mobilePages[currentPage] ? mobilePages[currentPage].html : '';
-                    // Hide current page so next page shows through
-                    mCurrentPage.style.visibility = 'hidden';
 
                     mFlip.classList.add('active');
 
                     setTimeout(function() {
                         mFlip.classList.remove('active');
                         currentPage = nextIdx;
-                        // Move next page content to current page without re-fetching
-                        mCurrentPage.innerHTML = mNextPage.innerHTML;
-                        mCurrentPage.style.visibility = 'visible';
                         updateControls();
                         flipping = false;
                     }, 1000);
