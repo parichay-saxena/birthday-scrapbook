@@ -177,11 +177,35 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
         object-fit: contain;
     }
 
+    .layout-1 {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+    }
+
+    .layout-2 {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr;
+    }
+
+    .layout-2-side {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr;
+    }
+
+    .layout-3 {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+    }
+
+    .layout-3 img:first-child {
+        grid-column: 1;
+    }
+
     .pf-flip-overlay {
         top: 0; left: 0;
         width: 100%; height: 100%;
         transform-origin: top center;
-        backface-visibility: hidden;
+        transform-style: preserve-3d;
     }
 
     .pf-flip-overlay.active {
@@ -198,7 +222,8 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
     }
 
     .pf-flip-back {
-        display: none;
+        background: linear-gradient(135deg, #fff5f5 0%, #ffe8ec 100%);
+        transform: rotateX(-180deg);
     }
 
     .pf-controls button {
@@ -1001,18 +1026,17 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
 
                     var nextIdx = currentPage + 1;
 
+                    // Front of flipping page = current page
                     flipFrontContent.innerHTML = pages[currentPage] ? pages[currentPage].html : '';
-                    flipBackContent.innerHTML = '';
-
-                    // Show next page underneath immediately so it loads during animation
-                    rightContent.innerHTML = pages[nextIdx] ? pages[nextIdx].html : '';
+                    // Back of flipping page = next page (revealed as page flips over)
+                    flipBackContent.innerHTML = pages[nextIdx] ? pages[nextIdx].html : '';
 
                     flipOverlay.classList.add('active');
 
                     setTimeout(function() {
                         flipOverlay.classList.remove('active');
                         currentPage = nextIdx;
-                        updateControls();
+                        showPage(currentPage);
                         flipping = false;
                     }, 1000);
                 }
