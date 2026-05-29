@@ -160,30 +160,21 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
     .page-content {
         overflow: hidden;
         height: 100%;
+        min-height: 0;
     }
 
     .collage {
         height: 100%;
+        min-height: 0;
         overflow: hidden;
     }
 
     .collage img {
-        object-fit: contain;
-        min-height: 0;
+        width: 100%;
         height: 100%;
-    }
-
-    .layout-2 {
-        grid-template-rows: 1fr 1fr;
-    }
-
-    .layout-2-side {
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr;
-    }
-
-    .layout-3 {
-        grid-template-rows: 1fr 1fr;
+        min-height: 0;
+        min-width: 0;
+        object-fit: contain;
     }
 
     .pf-flip-overlay {
@@ -1009,18 +1000,18 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
                     var nextIdx = currentPage + 1;
 
                     flipFrontContent.innerHTML = pages[currentPage] ? pages[currentPage].html : '';
-                    flipBackContent.innerHTML = pages[nextIdx] ? pages[nextIdx].html : '';
+                    flipBackContent.innerHTML = '';
+
+                    // Show next page underneath immediately so it loads during animation
+                    rightContent.innerHTML = pages[nextIdx] ? pages[nextIdx].html : '';
 
                     flipOverlay.classList.add('active');
 
                     setTimeout(function() {
                         flipOverlay.classList.remove('active');
                         currentPage = nextIdx;
-                        rightContent.innerHTML = '';
-                        setTimeout(function() {
-                            showPage(currentPage);
-                            flipping = false;
-                        }, 50);
+                        updateControls();
+                        flipping = false;
                     }, 1200);
                 }
 
