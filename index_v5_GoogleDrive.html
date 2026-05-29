@@ -115,6 +115,11 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
     100% { transform: rotateX(180deg); }
 }
 
+/* Hide mobile notepad on desktop */
+.mobile-notepad {
+    display: none;
+}
+
 /* Mobile: single page notepad flip */
 @media (max-width: 768px) {
     html, body {
@@ -239,10 +244,6 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
     }
 }
 
-/* Hide mobile notepad on desktop */
-.mobile-notepad {
-    display: none;
-}
 
 .page-content {
     width: 100%; height: 100%;
