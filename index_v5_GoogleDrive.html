@@ -202,9 +202,14 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
         object-fit: contain;
     }
 
-    .mobile-page .collage {
+    .mobile-page .collage.layout-1 {
         grid-template-columns: 1fr;
         grid-template-rows: 1fr;
+    }
+
+    .mobile-page .collage.layout-2 {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr;
     }
 
     .mobile-flip {
@@ -266,9 +271,14 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
         object-fit: contain;
     }
 
-    .mobile-flip-face .collage {
+    .mobile-flip-face .collage.layout-1 {
         grid-template-columns: 1fr;
         grid-template-rows: 1fr;
+    }
+
+    .mobile-flip-face .collage.layout-2 {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr;
     }
 
     .mobile-flip-face.back {
@@ -1052,11 +1062,22 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
                     pi++;
                 }
 
-                // Mobile: 1 photo per page
-                for (var m = 0; m < photos.length; m++) {
+                // Mobile: max 2 photos per page
+                var mi = 0;
+                var mPattern = [2, 1, 2, 2, 1];
+                var mpi = 0;
+                while (mi < photos.length) {
+                    var mRemaining = photos.length - mi;
+                    var mTake = mPattern[mpi % mPattern.length];
+                    if (mTake > mRemaining) mTake = mRemaining;
+                    var mChunk = photos.slice(mi, mi + mTake);
+                    var mLayout = mChunk.length === 1 ? 'layout-1' : 'layout-2';
+                    var mImgs = mChunk.map(function(p) { return imgTag(p); }).join('');
                     mobilePages.push({
-                        html: '<div class="page-content"><div class="collage layout-1">' + imgTag(photos[m]) + '</div></div>'
+                        html: '<div class="page-content"><div class="collage ' + mLayout + '">' + mImgs + '</div></div>'
                     });
+                    mi += mTake;
+                    mpi++;
                 }
             });
 
@@ -1098,11 +1119,11 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
 
                     var nextIdx = currentPage + 1;
 
-                    // Put next page underneath (visible as flip reveals it)
+                    // Next page underneath (revealed as current page flips up)
                     mNextPage.innerHTML = mobilePages[nextIdx] ? mobilePages[nextIdx].html : '';
-                    // Flip overlay front = current page (lifts up)
+                    // Flip overlay = current page lifting up
                     mFlipFront.innerHTML = mobilePages[currentPage] ? mobilePages[currentPage].html : '';
-                    // Hide current page underneath flip
+                    // Hide current page so next page shows through
                     mCurrentPage.style.visibility = 'hidden';
 
                     mFlip.classList.add('active');
@@ -1110,7 +1131,8 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; f
                     setTimeout(function() {
                         mFlip.classList.remove('active');
                         currentPage = nextIdx;
-                        mCurrentPage.innerHTML = mobilePages[currentPage] ? mobilePages[currentPage].html : '';
+                        // Move next page content to current page without re-fetching
+                        mCurrentPage.innerHTML = mNextPage.innerHTML;
                         mCurrentPage.style.visibility = 'visible';
                         updateControls();
                         flipping = false;
