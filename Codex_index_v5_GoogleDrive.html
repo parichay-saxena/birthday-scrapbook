@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Happy Birthday Alisha!</title>
+    <style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; font-family: 'Georgia', serif; }
+
+.pf-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    padding: 10px;
+    gap: 8px;
+}
+
+.pf-book {
+    width: 100%;
+    max-width: 100%;
+    flex: 1;
+    min-height: 0;
+    position: relative;
+    display: flex;
+    border-radius: 10px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+}
+
+.pf-left-page, .pf-right-page {
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.pf-left-page {
+    background: linear-gradient(135deg, #fff5f5 0%, #ffe8ec 100%);
+    border-radius: 10px 0 0 10px;
+    border-right: 2px solid #f0c4d0;
+}
+
+.pf-right-page {
+    background: linear-gradient(225deg, #fff5f5 0%, #ffe8ec 100%);
+    border-radius: 0 10px 10px 0;
+    border-left: 1px solid #f8dce4;
+}
+
+.pf-left-page::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 20px; height: 100%;
+    background: linear-gradient(to left, rgba(0,0,0,0.04), transparent);
+    pointer-events: none;
+}
+
+.pf-right-page::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 20px; height: 100%;
+    background: linear-gradient(to right, rgba(0,0,0,0.03), transparent);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.pf-flip-overlay {
+    position: absolute;
+    top: 0; left: 50%;
+    width: 50%; height: 100%;
+    transform-origin: left center;
+    transform-style: preserve-3d;
+    z-index: 10;
+    pointer-events: none;
+    display: none;
+}
+
+.pf-flip-overlay.active {
+    display: block;
+    animation: pageFlip 1s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+}
+
+.pf-flip-front, .pf-flip-back {
+    position: absolute;
+    width: 100%; height: 100%;
+    backface-visibility: hidden;
+    border-radius: 0 10px 10px 0;
+    overflow: hidden;
+}
+
+.pf-flip-front {
+    background: linear-gradient(225deg, #fff5f5 0%, #ffe8ec 100%);
+    box-shadow: -3px 0 15px rgba(0,0,0,0.15);
+}
+
+.pf-flip-back {
+    background: linear-gradient(135deg, #fff5f5 0%, #ffe8ec 100%);
+    transform: rotateY(180deg);
+    box-shadow: 3px 0 15px rgba(0,0,0,0.15);
+}
+
+@keyframes pageFlip {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(-180deg); }
+}
+
+@keyframes pageFlipUp {
+    0% { transform: rotateX(0deg); }
+    100% { transform: rotateX(180deg); }
+}
+
+/* Hide mobile notepad on desktop */
+.mobile-notepad {
+    display: none;
+}
+
+/* Mobile: single page notepad flip */
+@media (max-width: 768px) {
+    html, body {
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+    }
+
+    .pf-container {
+        padding: 4px;
+        gap: 4px;
+        height: 100vh;
+        height: 100dvh;
+        overflow: hidden;
+    }
+
+    .pf-book {
+        display: none;
+    }
+
+    .pf-controls button {
+        padding: 6px 14px;
+        font-size: 0.8rem;
+    }
+
+    .pf-indicator {
+        font-size: 0.75rem;
+        min-width: 60px;
+    }
+
+    /* Mobile notepad structure */
+    .mobile-notepad {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        flex: 1;
+        min-height: 0;
+        position: relative;
+        perspective: 1200px;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .mobile-page {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #fff5f5 0%, #ffe8ec 100%);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .mobile-page .page-content {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mobile-page .collage {
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .mobile-page .collage img {
+        flex: 1;
+        min-height: 0;
+        width: 100%;
+        object-fit: contain;
+    }
+
+    .mobile-flip {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        transform-origin: top center;
+        transform-style: preserve-3d;
+        z-index: 10;
+        pointer-events: none;
+    }
+
+    .mobile-flip.active {
+        animation: pageFlipUp 1s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+    }
+
+    .mobile-flip.done {
+        transform: rotateX(180deg);
+    }
+
+    .mobile-flip-face {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        border-radius: 10px;
+        overflow: hidden;
+        background: linear-gradient(135deg, #fff5f5 0%, #ffe8ec 100%);
+    }
+
+    .mobile-flip-face .page-content {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mobile-flip-face .collage {
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .mobile-flip-face .collage img {
+        flex: 1;
+        min-height: 0;
+        width: 100%;
+        object-fit: contain;
+    }
+
+    .mobile-flip-face.back {
+        transform: rotateX(-180deg);
+    }
+}
+
+
+.page-content {
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 4px;
+}
+
+.cover-page {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 15px;
+    background: linear-gradient(135deg, #ff6b9d 0%, #c44569 50%, #ff6b9d 100%);
+    border-radius: 10px;
+}
+
+.cover-page h1 {
+    font-size: 2.4rem;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    line-height: 1.3;
+}
+
+.cover-page h2 {
+    font-size: 1.3rem;
+    color: rgba(255,255,255,0.9);
+    font-weight: normal;
+    font-style: italic;
+}
+
+.cover-page .emoji { font-size: 3rem; }
+
+.back-cover {
+    background: linear-gradient(135deg, #c44569 0%, #ff6b9d 100%);
+    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 15px;
+}
+
+.back-cover h1 {
+    font-size: 2rem;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.back-cover p {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.9);
+    font-style: italic;
+    line-height: 1.6;
+}
+
+.year-divider {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #f8e1e8 0%, #fce4ec 100%);
+    border-radius: 8px;
+    margin: 4px;
+}
+
+.year-divider h1 {
+    font-size: 3.5rem;
+    color: #c44569;
+    font-weight: bold;
+}
+
+.year-divider p {
+    font-size: 1rem;
+    color: #8a4a6b;
+    font-style: italic;
+    padding: 0 10px;
+}
+
+.collage {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.collage img {
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    object-fit: contain;
+    object-position: center center;
+    border-radius: 3px;
+    background: #fce4ec;
+}
+
+.layout-1 {
+    flex-direction: column;
+}
+
+.layout-2 {
+    flex-direction: column;
+}
+
+.layout-2-side {
+    flex-direction: row;
+}
+
+.layout-2-side img {
+    height: 100%;
+    width: auto;
+    flex: 1;
+}
+
+.layout-3 {
+    flex-direction: column;
+}
+
+.layout-3 img:first-child {
+    flex: 1.5;
+    min-height: 0;
+}
+
+.layout-3 .layout-3-row {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+}
+
+.layout-3 .layout-3-row img {
+    flex: 1;
+    min-height: 0;
+    height: 100%;
+    object-fit: contain;
+}
+
+.pf-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+    padding: 4px 0;
+}
+
+.pf-controls button {
+    padding: 8px 18px;
+    font-size: 0.85rem;
+    background: #ff6b9d;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    color: white;
+    transition: background 0.2s, transform 0.1s;
+    font-weight: bold;
+}
+
+.pf-controls button:hover:not(:disabled) {
+    background: #c44569;
+    transform: translateY(-2px);
+}
+
+.pf-controls button:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.pf-indicator {
+    font-size: 0.85rem;
+    color: #ff9dbf;
+    min-width: 100px;
+    text-align: center;
+}
+
+/* Password overlay */
+.password-overlay {
+    position: fixed;
+    inset: 0;
+    background: #1a1a2e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001;
+}
+
+.password-box {
+    background: linear-gradient(135deg, #fff5f5 0%, #ffe8ec 100%);
+    border-radius: 16px;
+    padding: 40px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+
+.password-box h2 {
+    color: #c44569;
+    margin-bottom: 8px;
+    font-size: 1.5rem;
+}
+
+.password-box p {
+    color: #8a4a6b;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+}
+
+.password-box input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #f0c4d0;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    text-align: center;
+}
+
+.password-box input:focus {
+    border-color: #ff6b9d;
+}
+
+.password-box button {
+    margin-top: 16px;
+    padding: 12px 32px;
+    background: #ff6b9d;
+    border: none;
+    border-radius: 20px;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.password-box button:hover {
+    background: #c44569;
+}
+
+.password-box .error {
+    color: #c44569;
+    font-size: 0.85rem;
+    margin-top: 12px;
+    display: none;
+}
+
+/* Setup overlay */
+.setup-overlay {
+    position: fixed;
+    inset: 0;
+    background: #1a1a2e;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+.setup-overlay.visible {
+    display: flex;
+}
+
+.setup-box {
+    background: linear-gradient(135deg, #fff5f5 0%, #ffe8ec 100%);
+    border-radius: 16px;
+    padding: 40px;
+    max-width: 520px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+
+.setup-box h2 {
+    color: #c44569;
+    margin-bottom: 16px;
+    font-size: 1.5rem;
+}
+
+.setup-box p {
+    color: #8a4a6b;
+    margin-bottom: 20px;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.setup-box label {
+    display: block;
+    text-align: left;
+    color: #8a4a6b;
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin-bottom: 6px;
+    margin-top: 12px;
+}
+
+.setup-box input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #f0c4d0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+    outline: none;
+}
+
+.setup-box input:focus {
+    border-color: #ff6b9d;
+}
+
+.setup-box button {
+    margin-top: 16px;
+    padding: 12px 32px;
+    background: #ff6b9d;
+    border: none;
+    border-radius: 20px;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.setup-box button:hover {
+    background: #c44569;
+}
+
+.setup-box .error {
+    color: #c44569;
+    font-size: 0.85rem;
+    margin-top: 12px;
+    display: none;
+}
+
+.setup-box .hint {
+    color: #aaa;
+    font-size: 0.8rem;
+    text-align: left;
+    margin-top: 2px;
+}
+
+/* Loading overlay */
+.loading-overlay {
+    position: fixed;
+    inset: 0;
+    background: #1a1a2e;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    gap: 16px;
+}
+
+.loading-overlay p {
+    color: #ff9dbf;
+    font-size: 1.1rem;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #ff6b9d33;
+    border-top-color: #ff6b9d;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+    </style>
+</head>
+<body>
+    <!-- Password screen -->
+    <div class="password-overlay" id="password-overlay">
+        <div class="password-box">
+            <h2>🔒 Private Scrapbook</h2>
+            <p>Enter the password to view</p>
+            <input type="password" id="password-input" placeholder="Password">
+            <button id="password-btn">Enter</button>
+            <p class="error" id="password-error">Incorrect password</p>
+        </div>
+    </div>
+
+    <!-- Setup screen -->
+    <div class="setup-overlay" id="setup-overlay">
+        <div class="setup-box">
+            <h2>Setup Photos</h2>
+            <p>Upload your photos to a Google Drive folder, then share it:<br>
+            Right-click folder &rarr; Share &rarr; "Anyone with the link" &rarr; Copy link</p>
+
+            <label for="folder-link-input">Google Drive Folder Link</label>
+            <input type="text" id="folder-link-input" placeholder="https://drive.google.com/drive/folders/1ABC...?usp=sharing">
+            <p class="hint">Looks like: drive.google.com/drive/folders/...</p>
+
+            <label for="api-key-input">Google API Key</label>
+            <input type="text" id="api-key-input" placeholder="">
+            <p class="hint">Free at console.cloud.google.com &rarr; APIs &rarr; Drive API &rarr; Credentials</p>
+
+            <button id="setup-btn">Load Scrapbook</button>
+            <p class="error" id="setup-error"></p>
+        </div>
+    </div>
+
+    <!-- Loading screen -->
+    <div class="loading-overlay" id="loading-overlay" style="display:none;">
+        <div class="loading-spinner"></div>
+        <p id="loading-text">Loading photos...</p>
+    </div>
+
+    <div class="pf-container" style="display:none;" id="main-app">
+        <!-- Desktop: two-page book -->
+        <div class="pf-book" id="pf-book">
+            <div class="pf-left-page" id="pf-left">
+                <div class="page-content" id="pf-left-content"></div>
+            </div>
+            <div class="pf-right-page" id="pf-right">
+                <div class="page-content" id="pf-right-content"></div>
+            </div>
+            <div class="pf-flip-overlay" id="pf-flip">
+                <div class="pf-flip-front">
+                    <div class="page-content" id="pf-flip-front-content"></div>
+                </div>
+                <div class="pf-flip-back">
+                    <div class="page-content" id="pf-flip-back-content"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile: single page notepad -->
+        <div class="mobile-notepad" id="mobile-notepad">
+            <div class="mobile-page" id="mobile-next-page"></div>
+            <div class="mobile-page" id="mobile-current-page"></div>
+            <div class="mobile-flip" id="mobile-flip">
+                <div class="mobile-flip-face front" id="mobile-flip-front"></div>
+                <div class="mobile-flip-face back" id="mobile-flip-back"></div>
+            </div>
+        </div>
+
+        <div class="pf-controls">
+            <button id="pf-prev" disabled>&#9664; Back</button>
+            <span class="pf-indicator" id="pf-indicator"></span>
+            <button id="pf-next">Next &#9654;</button>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        // Extract folder ID from a Google Drive folder link
+        function extractFolderId(url) {
+            // Formats:
+            // https://drive.google.com/drive/folders/1ABC123?usp=sharing
+            // https://drive.google.com/drive/folders/1ABC123
+            var match = url.match(/folders\/([a-zA-Z0-9_-]+)/);
+            return match ? match[1] : null;
+        }
+
+        // Build a thumbnail/download URL for a Google Drive file
+        function driveImageUrl(fileId) {
+            return 'https://drive.google.com/thumbnail?id=' + fileId + '&sz=w1200';
+        }
+
+        // All photos grouped by year
+        var photosByYear = {
+            '1997': {
+                caption: "The future AI engineer has entered the chat. Currently debugging: how to walk. \u{1F476}\u{1F37C}",
+                photos: ['1997-01-cake.jpg','1997-02.jpg','1997-03.jpg','1997-04.jpg','1997-05.jpg','1997-06.jpg','1997-07.jpg','1997-08.jpg','1997-09.jpg','1997-10.jpg','1997-11.jpg','1997-12.jpg']
+            },
+            '1998': {
+                caption: "Two years old and already pulling Dad's leg. Also learned the word 'no.' Used it 847 times today. \u{1F624}✌️",
+                photos: ['1998-01.jpg','1998-02.jpg','1998-03.jpg','1998-04.jpg','1998-05.jpg','1998-06.jpg','1998-07.jpg','1998-08.jpg','1998-09.jpg']
+            },
+            '1999': {
+                caption: "Three and already dressing like she's going to the Met Gala. Attitude: loaded. Snacks: demanded. \u{1F457}\u{1F36A}",
+                photos: ['1999-01.jpg','1999-02.jpg','1999-03.jpg','1999-04.jpg','1999-05.jpg','1999-06.jpg']
+            },
+            '2000': {
+                caption: "Four years old. Career plan: princess. Backup plan: also princess. Will settle for nothing less than a full costume change every hour. \u{1F451}\u{1F3AD}",
+                photos: ['2000-01-cake.jpg','2000-02-cake.jpg','2000-03.jpg','2000-04.jpg','2000-05.jpg','2000-06.jpg','2000-07.jpg','2000-08.jpg','2000-09.jpg','2000-10.jpg','2000-11.jpg','2000-12.jpg','2000-13.jpg','2000-14.jpg','2000-15.jpg']
+            },
+            '2001': {
+                caption: "Five. Got a sister. Immediately began a lifelong career of roasting her. Also discovered food > everything. \u{1F355}\u{1F476}",
+                photos: ['2001-01-cake.jpg','2001-02.jpg','2001-03.jpg','2001-04.jpg','2001-05.jpg','2001-06.jpg','2001-07.jpg','2001-08.jpg','2001-09.jpg','2001-10.jpg','2001-11.jpg','2001-12.jpg','2001-13.jpg','2001-14.jpg']
+            },
+            '2002': {
+                caption: "Six. Runs the playground like a startup CEO. Teacher's pet by day, snack thief by night. \u{1F392}\u{1F36B}",
+                photos: ['2002-01.jpg','2002-02.jpg','2002-03.jpg','2002-04.jpg','2002-05.jpg','2002-06.jpg','2002-07.jpg','2002-08.jpg','2002-09.jpg','2002-10.jpg','2002-11.jpg','2002-12.jpg','2002-13.jpg']
+            },
+            '2003': {
+                caption: "Seven candles on the cake. Blew them out in one breath. Wished for more cake. Wish granted. \u{1F382}\u{1F32C}️",
+                photos: ['2003-01-cake.jpg','2003-02-cake.jpg','2003-03-cake.jpg','2003-04-cake.jpg','2003-05-cake.jpg','2003-06.jpg','2003-07.jpg','2003-08.jpg','2003-09.jpg','2003-10.jpg','2003-11.jpg','2003-12.jpg','2003-13.jpg','2003-14.jpg','2003-15.jpg','2003-16.jpg','2003-17.jpg']
+            },
+            '2004': {
+                caption: "Eight. Can now reach the kitchen counter unsupervised. The snack game has evolved. \u{1F370}\u{1F3D7}️",
+                photos: ['2004-01-cake.jpg','2004-02-cake.jpg','2004-03-cake.jpg','2004-04.jpg','2004-05.jpg','2004-06.jpg','2004-07.jpg','2004-08.jpg','2004-09.jpg']
+            },
+            '2005': {
+                caption: "Nine. Brought cupcakes to school. Ate three herself before distribution. 'Quality control,' she said. \u{1F9C1}\u{1F52C}",
+                photos: ['2005-01-cake.jpg','2005-02.jpg','2005-03.jpg','2005-04.jpg','2005-05.jpg','2005-06.jpg','2005-07.jpg','2005-08.jpg','2005-09.jpg','2005-10.jpg','2005-11.jpg','2005-12.jpg','2005-13.jpg']
+            },
+            '2006': {
+                caption: "Double digits! Demanded a 'grown-up' birthday. Still cried when the cake flavor wasn't right. A legend. \u{1F51F}\u{1F62D}\u{1F382}",
+                photos: ['2006-01-cake.jpg','2006-02-cake.jpg','2006-03-cake.jpg','2006-04.jpg','2006-05.jpg']
+            },
+            '2007': {
+                caption: "Eleven. Started watching F1. Now critiques Dad's driving. 'That's not a racing line, Papa.' \u{1F3CE}️\u{1F4A8}",
+                photos: ['2007-01.jpg','2007-02.jpg','2007-03.jpg','2007-04.jpg']
+            },
+            '2008': {
+                caption: "Twelve. Took apart the TV remote 'to see how it works.' Did not put it back together. Engineering era begins. \u{1F527}\u{1F4FA}",
+                photos: ['2008-01.jpg','2008-02.jpg','2008-03.jpg','2008-04.jpg','2008-05.jpg','2008-06.jpg','2008-07.jpg','2008-08.jpg','2008-09.jpg']
+            },
+            '2009': {
+                caption: "Thirteen. Officially a teenager. Personality: 60% sarcasm, 30% food, 10% plotting pranks on her sister. \u{1F60F}\u{1F3AD}",
+                photos: ['2009-01-cake.jpg','2009-02-cake.jpg','2009-03-cake.jpg','2009-04.jpg','2009-05.jpg','2009-06.jpg','2009-07.jpg','2009-08.jpg','2009-09.jpg','2009-10.jpg','2009-11.jpg','2009-12.jpg','2009-13.jpg']
+            },
+            '2010': {
+                caption: "Fourteen. Discovered memes. Family group chat has never been the same. Dad still doesn't get them. \u{1F4F1}\u{1F602}",
+                photos: ['2010-01-cake.jpg','2010-02.jpg','2010-03.jpg','2010-04.jpg']
+            },
+            '2011': {
+                caption: "Fifteen. Birthday dinner request: sushi. Backup: also sushi. The foodie era is fully operational. \u{1F363}\u{1F371}",
+                photos: ['2011-01-cake.jpg','2011-02-cake.jpg','2011-03.jpg','2011-04.jpg','2011-05.jpg','2011-06.jpg','2011-07.jpg']
+            },
+            '2012': {
+                caption: "Sweet sixteen! Asked for a car. Got cake. Roasted Dad about it for the next 3 years. \u{1F697}\u{1F382}\u{1F644}",
+                photos: ['2012-01-cake.jpg','2012-02.jpg','2012-03.jpg','2012-04.jpg','2012-05.jpg','2012-06.jpg','2012-07.jpg','2012-08.jpg','2012-09.jpg','2012-10.jpg','2012-11.jpg','2012-12.jpg','2012-13.jpg','2012-14.jpg']
+            },
+            '2013': {
+                caption: "Seventeen. Can now cook better than most adults. Still burns toast on purpose 'for the aesthetic.' \u{1F469}‍\u{1F373}\u{1F525}",
+                photos: ['2013-01-cake.jpg','2013-02-cake.jpg','2013-03.jpg','2013-04.jpg','2013-05.jpg','2013-06.jpg','2013-07.jpg','2013-08.jpg','2013-09.jpg']
+            },
+            '2014': {
+                caption: "Eighteen. Legally an adult. Emotionally? Still sending Dad memes at 2 AM and raiding the fridge at midnight. \u{1F393}\u{1F319}\u{1F355}",
+                photos: ['2014-01-cake.jpg','2014-02-cake.jpg','2014-03.jpg','2014-04.jpg','2014-05.jpg','2014-06.jpg','2014-07.jpg','2014-08.jpg','2014-09.jpg','2014-10.jpg','2014-11.jpg','2014-12.jpg','2014-13.jpg','2014-14.jpg','2014-15.jpg']
+            },
+            '2015': {
+                caption: "Nineteen. College life = unlimited food experiments. Roommates feared her 'fusion cuisine.' The kitchen survived. Barely. \u{1F9EA}\u{1F373}",
+                photos: ['2015-01-cake.jpg','2015-02.jpg','2015-03.jpg','2015-04.jpg','2015-05.jpg','2015-06.jpg','2015-07.jpg','2015-08.jpg','2015-09.jpg','2015-10.jpg']
+            },
+            '2016': {
+                caption: "Twenty! No longer a teen but still stealing her sister's clothes. Some things are eternal. \u{1F457}\u{1F608}",
+                photos: ['2016-01-cake.jpg','2016-02-cake.jpg','2016-03-cake.jpg','2016-04.jpg','2016-05.jpg','2016-06.jpg','2016-07.jpg','2016-08.jpg']
+            },
+            '2017': {
+                caption: "Twenty-one. Can now legally do what she's been doing since fifteen: judging everyone's food orders. \u{1F37E}\u{1F37D}️",
+                photos: ['2017-01-cake.jpg','2017-02-cake.jpg','2017-03.jpg','2017-04.jpg','2017-05.jpg']
+            },
+            '2018': {
+                caption: "Twenty-two. Graduation season! From classroom to kitchen to the world — unstoppable. \u{1F393}\u{1F30D}\u{1F469}‍\u{1F373}",
+                photos: ['2018-01.jpg','2018-02.jpg','2018-03.jpg','2018-04.jpg','2018-05.jpg']
+            },
+            '2019': {
+                caption: "Twenty-three. Traveling, exploring, eating her way through new cities. Living the dream. ✈️\u{1F35C}\u{1F5FA}️",
+                photos: ['2019-01.jpg','2019-02.jpg','2019-03.jpg','2019-04.jpg']
+            },
+            '2020': {
+                caption: "Twenty-four. Lockdown birthday. Made a 5-course meal for herself. Reviewed it. Gave it 4 stars. 'Ambiance was lacking.' \u{1F3E0}\u{1F469}‍\u{1F373}⭐",
+                photos: ['2020-01-cake.jpg','2020-02-cake.jpg','2020-03-cake.jpg','2020-04.jpg','2020-05.jpg','2020-06.jpg','2020-07.jpg','2020-08.jpg','2020-09.jpg','2020-10.jpg']
+            },
+            '2021': {
+                caption: "Twenty-five. Teaching self-driving cars at Waymo by day, sending her sister passive-aggressive memes by night. Peak Alisha. \u{1F697}\u{1F916}\u{1F60F}",
+                photos: ['2021-01-cake.jpg','2021-02-cake.jpg','2021-03-cake.jpg','2021-04.jpg','2021-05.jpg','2021-06.jpg','2021-07.jpg','2021-08.jpg','2021-09.jpg','2021-10.jpg','2021-11.jpg','2021-12.jpg','2021-13.jpg','2021-14.jpg','2021-15.jpg','2021-16.jpg','2021-17.jpg']
+            },
+            '2022': {
+                caption: "Twenty-six. Passport stamps: collecting. Countries visited: many. Food documented: ALL of it. Michelin guide, watch out. \u{1F30D}✈️\u{1F4F8}",
+                photos: ['2022-01.jpg','2022-02.jpg','2022-03.jpg','2022-04.jpg','2022-05.jpg','2022-06.jpg','2022-07.jpg','2022-08.jpg','2022-09.jpg','2022-10.jpg','2022-11.jpg','2022-12.jpg','2022-13.jpg','2022-14.jpg','2022-15.jpg','2022-16.jpg','2022-17.jpg','2022-18.jpg','2022-19.jpg','2022-20.jpg','2022-21.jpg','2022-22.jpg','2022-23.jpg','2022-24.jpg','2022-25.jpg','2022-26.jpg','2022-27.jpg','2022-28.jpg','2022-29.jpg','2022-30.jpg','2022-31.jpg']
+            },
+            '2023': {
+                caption: "Twenty-seven. Building AI glasses at Meta so she can literally look at food and identify it. Finally combined her two passions. \u{1F97D}\u{1F35C}\u{1F916}",
+                photos: ['2023-01.jpg','2023-02.jpg','2023-03.jpg','2023-04.jpg','2023-05.jpg','2023-06.jpg','2023-07.jpg','2023-08.jpg','2023-09.jpg','2023-10.jpg','2023-11.jpg','2023-12.jpg','2023-13.jpg','2023-14.jpg','2023-15.jpg','2023-16.jpg','2023-17.jpg','2023-18.jpg','2023-19.jpg','2023-20.jpg','2023-21.jpg','2023-22.jpg','2023-23.jpg','2023-24.jpg','2023-25.jpg','2023-26.jpg','2023-27.jpg']
+            },
+            '2024': {
+                caption: "Twenty-eight. Watches F1 qualifying at 6 AM. Sends Dad spoilers before he wakes up. Chaos agent. \u{1F3CE}️\u{1F4F1}\u{1F608}",
+                photos: ['2024-01.jpg','2024-02.jpg','2024-03.jpg','2024-04.jpg','2024-05.jpg','2024-06.jpg','2024-07.jpg','2024-08.jpg','2024-09.jpg','2024-10.jpg','2024-11.jpg','2024-12.jpg','2024-13.jpg','2024-14.jpg','2024-15.jpg','2024-16.jpg','2024-17.jpg','2024-18.jpg','2024-19.jpg','2024-20.jpg','2024-21.jpg','2024-22.jpg','2024-23.jpg','2024-24.jpg','2024-25.jpg','2024-26.jpg','2024-27.jpg']
+            },
+            '2025': {
+                caption: "Twenty-nine. From debugging walking to debugging AI. Still roasts her family daily. Some firmware never gets patched. \u{1F942}\u{1F916}\u{1F480}",
+                photos: ['2025-01.jpg','2025-02.jpg','2025-03.jpg','2025-04.jpg','2025-05.jpg','2025-06.jpg','2025-07.jpg','2025-08.jpg','2025-09.jpg','2025-10.jpg','2025-11.jpg','2025-12.jpg','2025-13.jpg','2025-14.jpg','2025-15.jpg','2025-16.jpg','2025-17.jpg','2025-18.jpg','2025-19.jpg','2025-20.jpg','2025-21.jpg']
+            }
+        };
+
+        // Portrait photos set
+        var portraitSet = {
+            '2000-08.jpg':1,'2000-01-cake.jpg':1,'2000-02-cake.jpg':1,'2000-12.jpg':1,
+            '2011-06.jpg':1,'2007-01.jpg':1,'2005-08.jpg':1,
+            '2008-01.jpg':1,'2008-09.jpg':1,'2014-10.jpg':1,
+            '2023-01.jpg':1,'2021-09.jpg':1,'2022-10.jpg':1,
+            '2022-12.jpg':1,'2022-13.jpg':1,'2022-14.jpg':1,
+            '2024-01.jpg':1,'2023-04.jpg':1,'2024-05.jpg':1,
+            '2022-16.jpg':1,'2022-19.jpg':1,'2022-24.jpg':1,
+            '2022-25.jpg':1,'2024-11.jpg':1,'2024-12.jpg':1,
+            '2022-27.jpg':1,'2022-28.jpg':1,'2022-29.jpg':1,
+            '2022-30.jpg':1,'2022-31.jpg':1,'2024-17.jpg':1,
+            '2024-18.jpg':1,'2024-19.jpg':1,'2024-20.jpg':1,
+            '2024-23.jpg':1,'2024-25.jpg':1,'2024-26.jpg':1,
+            '2024-27.jpg':1,'2023-09.jpg':1,'2023-11.jpg':1,
+            '2023-16.jpg':1,'2025-03.jpg':1,'2025-05.jpg':1,
+            '2025-07.jpg':1,'2025-10.jpg':1,'2025-11.jpg':1,
+            '2023-20.jpg':1,'2023-23.jpg':1,'2025-13.jpg':1,
+            '2025-14.jpg':1,'2023-24.jpg':1,'2023-25.jpg':1,
+            '2025-16.jpg':1,'2025-18.jpg':1,'2023-26.jpg':1,
+            '2023-27.jpg':1,'2009-12.jpg':1,
+            '2021-11.jpg':1,'2022-02.jpg':1,
+            '2013-07.jpg':1,'2013-08.jpg':1,'2011-07.jpg':1
+        };
+
+        function isPortrait(p) { return portraitSet[p] === 1; }
+
+        // --- Password gate ---
+        var ENCRYPTED_CONFIG = 'vb4UZtkFTkX9u1ZYNiKZ9oHf42ro4ATn8tj3+80Ti0yd92eQnFoEv3ww82J50apor+Mu8Y00Z9xw/8HTDxcq+8kKhdMQlk3qcImDNJYIk6fDK5G4vETPCIO2zXI3tfyv0jmMs8dH2HktcF6X5tQa/WLQGPflPCGHQn0bEYoAOQ==';
+        var passwordOverlay = document.getElementById('password-overlay');
+        var passwordInput = document.getElementById('password-input');
+        var passwordBtn = document.getElementById('password-btn');
+        var passwordError = document.getElementById('password-error');
+
+        async function decryptConfig(password) {
+            var combined = Uint8Array.from(atob(ENCRYPTED_CONFIG), function(c) { return c.charCodeAt(0); });
+            var iv = combined.slice(0, 12);
+            var ciphertext = combined.slice(12);
+
+            var keyBuf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(password));
+            var key = await crypto.subtle.importKey('raw', keyBuf, 'AES-GCM', false, ['decrypt']);
+
+            var decrypted = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: iv }, key, ciphertext);
+            return JSON.parse(new TextDecoder().decode(decrypted));
+        }
+
+        async function checkPassword() {
+            try {
+                var config = await decryptConfig(passwordInput.value);
+                passwordOverlay.style.display = 'none';
+                loadPhotos(config.folderId, config.apiKey);
+            } catch(e) {
+                passwordError.style.display = 'block';
+            }
+        }
+
+        passwordBtn.addEventListener('click', checkPassword);
+        passwordInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                checkPassword();
+            }
+        });
+
+        // --- Setup ---
+        var setupOverlay = document.getElementById('setup-overlay');
+        var loadingOverlay = document.getElementById('loading-overlay');
+        var loadingText = document.getElementById('loading-text');
+        var setupBtn = document.getElementById('setup-btn');
+        var folderInput = document.getElementById('folder-link-input');
+        var apiKeyInput = document.getElementById('api-key-input');
+        var setupError = document.getElementById('setup-error');
+        var mainApp = document.getElementById('main-app');
+
+
+        setupBtn.addEventListener('click', function() {
+            var folderLink = folderInput.value.trim();
+            var apiKey = apiKeyInput.value.trim();
+
+            if (!folderLink || !apiKey) {
+                setupError.style.display = 'block';
+                setupError.textContent = 'Please fill in both fields.';
+                return;
+            }
+
+            var folderId = extractFolderId(folderLink);
+            if (!folderId) {
+                setupError.style.display = 'block';
+                setupError.textContent = 'Could not extract folder ID from that link. Make sure it\'s a Google Drive folder URL.';
+                return;
+            }
+
+            localStorage.setItem('gdrive_config', JSON.stringify({ folderId: folderId, apiKey: apiKey }));
+            loadPhotos(folderId, apiKey);
+        });
+
+        function loadPhotos(folderId, apiKey) {
+            if (setupOverlay) setupOverlay.style.display = 'none';
+            loadingOverlay.style.display = 'flex';
+            loadingText.textContent = 'Loading photos from Google Drive...';
+
+            // Fetch all files in the folder (paginated)
+            var allFiles = [];
+            fetchPage('');
+
+            function fetchPage(pageToken) {
+                var url = 'https://www.googleapis.com/drive/v3/files?q=%27' + folderId + '%27+in+parents+and+mimeType+contains+%27image%27&fields=nextPageToken,files(id,name)&pageSize=1000&key=' + apiKey;
+                if (pageToken) url += '&pageToken=' + pageToken;
+
+                fetch(url)
+                    .then(function(res) {
+                        if (!res.ok) throw new Error('API error: ' + res.status);
+                        return res.json();
+                    })
+                    .then(function(data) {
+                        if (data.error) throw new Error(data.error.message);
+                        allFiles = allFiles.concat(data.files || []);
+                        if (data.nextPageToken) {
+                            fetchPage(data.nextPageToken);
+                        } else {
+                            startApp(allFiles);
+                        }
+                    })
+                    .catch(function(err) {
+                        loadingOverlay.style.display = 'none';
+                        setupOverlay.classList.add('visible');
+                        setupError.style.display = 'block';
+                        setupError.textContent = 'Error: ' + err.message + '. Check your API key and folder sharing settings.';
+                        localStorage.removeItem('gdrive_config');
+                    });
+            }
+        }
+
+        function startApp(files) {
+            // Build a map: filename -> file ID
+            var fileMap = {};
+            files.forEach(function(f) {
+                fileMap[f.name] = f.id;
+            });
+
+            loadingOverlay.style.display = 'none';
+            mainApp.style.display = 'flex';
+            buildScrapbook(fileMap);
+        }
+
+        function buildScrapbook(fileMap) {
+            var leftContent = document.getElementById('pf-left-content');
+            var rightContent = document.getElementById('pf-right-content');
+            var flipOverlay = document.getElementById('pf-flip');
+            var flipFrontContent = document.getElementById('pf-flip-front-content');
+            var flipBackContent = document.getElementById('pf-flip-back-content');
+            var prevBtn = document.getElementById('pf-prev');
+            var nextBtn = document.getElementById('pf-next');
+            var indicator = document.getElementById('pf-indicator');
+
+            var currentSpread = 0;
+            var totalSpreads = 0;
+            var flipping = false;
+
+            function imgTag(filename) {
+                var fileId = fileMap[filename];
+                if (!fileId) return '<img src="" alt="' + filename + ' not found" style="opacity:0.3;">';
+                return '<img src="' + driveImageUrl(fileId) + '" alt="" loading="lazy">';
+            }
+
+            // Build pages
+            var pages = [];
+            var mobilePages = [];
+
+            pages.push({
+                html: '<div class="page-content cover-page"><span class="emoji">\u{1F382}\u{1F388}\u{1F389}</span><h1>Happy Birthday<br>Alisha!</h1><h2>A scrapbook of memories</h2><span class="emoji">\u{1F496}✨\u{1F31F}</span></div>'
+            });
+            mobilePages.push(pages[pages.length - 1]);
+
+            var years = Object.keys(photosByYear).sort();
+
+            years.forEach(function(year) {
+                var group = photosByYear[year];
+                var photos = group.photos;
+
+                var dividerPage = {
+                    html: '<div class="page-content year-divider"><h1>' + year + '</h1><p>' + group.caption + '</p></div>'
+                };
+                pages.push(dividerPage);
+                mobilePages.push(dividerPage);
+
+                // Desktop: 3, 2, 3, 1 pattern
+                var pattern = [3, 2, 3, 1, 3, 2];
+                var i = 0;
+                var pi = 0;
+                while (i < photos.length) {
+                    var remaining = photos.length - i;
+                    var take = pattern[pi % pattern.length];
+                    if (take > remaining) take = remaining;
+                    if (remaining - take === 1 && take === 3) take = 2;
+                    if (take > remaining) take = remaining;
+
+                    var chunk = photos.slice(i, i + take);
+                    var layoutClass;
+                    if (chunk.length === 1) {
+                        layoutClass = 'layout-1';
+                    } else if (chunk.length === 2) {
+                        if (isPortrait(chunk[0]) && isPortrait(chunk[1])) {
+                            layoutClass = 'layout-2-side';
+                        } else {
+                            layoutClass = 'layout-2';
+                        }
+                    } else {
+                        layoutClass = 'layout-3';
+                    }
+                    var imgsHTML;
+                    if (chunk.length === 3) {
+                        imgsHTML = imgTag(chunk[0]) + '<div class="layout-3-row">' + imgTag(chunk[1]) + imgTag(chunk[2]) + '</div>';
+                    } else {
+                        imgsHTML = chunk.map(function(p) { return imgTag(p); }).join('');
+                    }
+                    pages.push({
+                        html: '<div class="page-content"><div class="collage ' + layoutClass + '">' + imgsHTML + '</div></div>'
+                    });
+                    i += take;
+                    pi++;
+                }
+
+                // Mobile: max 2 photos per page
+                var mi = 0;
+                var mPattern = [2, 1, 2, 2, 1];
+                var mpi = 0;
+                while (mi < photos.length) {
+                    var mRemaining = photos.length - mi;
+                    var mTake = mPattern[mpi % mPattern.length];
+                    if (mTake > mRemaining) mTake = mRemaining;
+                    var mChunk = photos.slice(mi, mi + mTake);
+                    var mLayout = mChunk.length === 1 ? 'layout-1' : 'layout-2';
+                    var mImgs = mChunk.map(function(p) { return imgTag(p); }).join('');
+                    mobilePages.push({
+                        html: '<div class="page-content"><div class="collage ' + mLayout + '">' + mImgs + '</div></div>'
+                    });
+                    mi += mTake;
+                    mpi++;
+                }
+            });
+
+            var backPage = {
+                html: '<div class="page-content back-cover"><span class="emoji" style="font-size:4rem;">\u{1F496}</span><h1>Happy Birthday, Superstar!</h1><p>29 years of roasting Dad, outsmarting her sister,<br>eating everything in sight, and casually<br>building the future of AI on the side.</p><p>We love you more than you love food.<br>(And that\'s saying A LOT.) \u{1F319}✨\u{1F355}</p></div>'
+            };
+            pages.push(backPage);
+            mobilePages.push(backPage);
+
+            if (pages.length % 2 !== 0) pages.push({ html: '<div class="page-content"></div>' });
+
+            var isMobile = window.matchMedia('(max-width: 768px)').matches;
+
+            if (isMobile) {
+                // Mobile: single-page notepad mode
+                var mCurrentPage = document.getElementById('mobile-current-page');
+                var mNextPage = document.getElementById('mobile-next-page');
+                var mFlip = document.getElementById('mobile-flip');
+                var mFlipFront = document.getElementById('mobile-flip-front');
+                var mFlipBack = document.getElementById('mobile-flip-back');
+
+                var currentPage = 0;
+                var totalPages = mobilePages.length;
+
+                function updateControls() {
+                    prevBtn.disabled = currentPage === 0;
+                    nextBtn.disabled = currentPage >= totalPages - 1;
+                    indicator.textContent = (currentPage + 1) + ' / ' + totalPages;
+                }
+
+                function showPage(idx) {
+                    mCurrentPage.innerHTML = mobilePages[idx] ? mobilePages[idx].html : '';
+                    updateControls();
+                }
+
+                function goNext() {
+                    if (currentPage >= totalPages - 1 || flipping) return;
+                    flipping = true;
+
+                    var nextIdx = currentPage + 1;
+
+                    // Reset flip to flat position
+                    mFlip.classList.remove('done');
+                    // Flip overlay shows current page (will lift up)
+                    mFlipFront.innerHTML = mobilePages[currentPage] ? mobilePages[currentPage].html : '';
+                    // Put next page underneath
+                    mCurrentPage.innerHTML = mobilePages[nextIdx] ? mobilePages[nextIdx].html : '';
+
+                    // Force reflow before starting animation
+                    void mFlip.offsetHeight;
+
+                    mFlip.classList.add('active');
+
+                    setTimeout(function() {
+                        mFlip.classList.remove('active');
+                        mFlip.classList.add('done');
+                        currentPage = nextIdx;
+                        updateControls();
+                        flipping = false;
+                    }, 1000);
+                }
+
+                function goPrev() {
+                    if (currentPage <= 0 || flipping) return;
+                    currentPage--;
+                    showPage(currentPage);
+                }
+
+                showPage(0);
+            } else {
+                // Desktop: two-page spread mode
+                totalSpreads = pages.length / 2;
+
+                function updateControls() {
+                    prevBtn.disabled = currentSpread === 0;
+                    nextBtn.disabled = currentSpread >= totalSpreads - 1;
+                    indicator.textContent = (currentSpread + 1) + ' / ' + totalSpreads;
+                }
+
+                function showSpread(idx) {
+                    var li = idx * 2;
+                    var ri = idx * 2 + 1;
+                    leftContent.innerHTML = pages[li] ? pages[li].html : '';
+                    rightContent.innerHTML = pages[ri] ? pages[ri].html : '';
+                    updateControls();
+                }
+
+                function goNext() {
+                    if (currentSpread >= totalSpreads - 1 || flipping) return;
+                    flipping = true;
+
+                    var nextSpread = currentSpread + 1;
+                    var curRightIdx = currentSpread * 2 + 1;
+                    var nextLeftIdx = nextSpread * 2;
+                    var nextRightIdx = nextSpread * 2 + 1;
+
+                    // Front of flip = current right page, back = next left page
+                    flipFrontContent.innerHTML = pages[curRightIdx] ? pages[curRightIdx].html : '';
+                    flipBackContent.innerHTML = pages[nextLeftIdx] ? pages[nextLeftIdx].html : '';
+                    // Update left page before flip (always visible, no overlay covers it)
+                    leftContent.innerHTML = pages[nextLeftIdx] ? pages[nextLeftIdx].html : '';
+                    // Next right page loads underneath (visible once flip passes midpoint)
+                    rightContent.innerHTML = pages[nextRightIdx] ? pages[nextRightIdx].html : '';
+
+                    flipOverlay.classList.add('active');
+
+                    setTimeout(function() {
+                        flipOverlay.style.display = 'none';
+                        flipOverlay.classList.remove('active');
+                        flipOverlay.style.display = '';
+                        currentSpread = nextSpread;
+                        updateControls();
+                        flipping = false;
+                    }, 1000);
+                }
+
+                function goPrev() {
+                    if (currentSpread <= 0 || flipping) return;
+                    currentSpread--;
+                    showSpread(currentSpread);
+                }
+
+                showSpread(0);
+            }
+
+            nextBtn.addEventListener('click', goNext);
+            prevBtn.addEventListener('click', goPrev);
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowRight') goNext();
+                if (e.key === 'ArrowLeft') goPrev();
+            });
+
+            var touchStartX = 0;
+            document.getElementById('pf-book').addEventListener('touchstart', function(e) { touchStartX = e.changedTouches[0].screenX; });
+            document.getElementById('pf-book').addEventListener('touchend', function(e) {
+                var diff = touchStartX - e.changedTouches[0].screenX;
+                if (diff > 50) goNext();
+                else if (diff < -50) goPrev();
+            });
+
+            document.getElementById('pf-left').addEventListener('click', goPrev);
+            document.getElementById('pf-right').addEventListener('click', goNext);
+        }
+    })();
+    </script>
+</body>
+</html>
